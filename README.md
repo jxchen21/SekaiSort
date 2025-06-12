@@ -4,6 +4,7 @@
 A Python-based tier-processing tool for Project Sekai: Colorful Stage! Upload your tier screenshots and get a cleanly formatted, sorted output without the hassle.
 
 CleanImage: Crops tier screenshot to desired size and removes background
+
 ProcessTier: Uses Tesseract OCR to extract rank and username from screenshot, returns sorted results
 
 Made with 💖 by Johnny C (Aka. Arctic)
