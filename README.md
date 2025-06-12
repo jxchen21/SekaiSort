@@ -7,4 +7,6 @@ CleanImage: Crops tier screenshot to desired size and removes background
 
 ProcessTier: Uses Tesseract OCR to extract rank and username from screenshot, returns sorted results
 
+WIP: NextJS App for simplified User Experience. Stay tuned!
+
 Made with 💖 by Johnny C (Aka. Arctic)
