@@ -1,6 +1,3 @@
-# Program courtesy of @fraxel
-# https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
-
 from PIL import Image, ImageDraw
 import numpy as np
 from scipy.ndimage import binary_fill_holes
@@ -19,6 +16,8 @@ def clear_directory(dir_path):
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
 
+# Program courtesy of @fraxel
+# https://stackoverflow.com/questions/11287402/how-to-round-corner-a-logo-without-white-backgroundtransparent-on-it-using-pi
 def add_corners(image_path, rad):
     circle = Image.new('L', (rad * 2, rad * 2), 0)
     draw = ImageDraw.Draw(circle)
@@ -59,19 +58,17 @@ def extract_inside_static_pink(image_path, output_path, pink_rgb=[225,128,168], 
     cropped.save(output_path)
     print(f"✅ Cropped image saved to: {output_path}")
 
+def main():
+    directory = os.fsencode("./input/")
+    clear_directory("./output/")
+    counter = 1
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        extension = filename.split(".")[1]
+        if(extension in ["png", "jpg"]):
+            out_path = "./output/" + "tier_img" + str(counter) + ".png"
+            extract_inside_static_pink("./input/" + filename, out_path)
+            counter+=1
 
-
-
-directory = os.fsencode("./input/")
-clear_directory("./output/")
-counter = 1
-for file in os.listdir(directory):
-    filename = os.fsdecode(file)
-    extension = filename.split(".")[1]
-    if(extension in ["png", "jpg"]):
-        out_path = "./output/" + "tier_img" + str(counter) + ".png"
-        extract_inside_static_pink(
-            "./input/" + filename,
-            out_path,
-        )
-        counter+=1
+if __name__=="__main__":
+    main()
