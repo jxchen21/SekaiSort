@@ -16,7 +16,7 @@ def clear_directory(dir_path):
             print(f'Failed to delete {file_path}. Reason: {e}')
 
 def extract_text_from_image(image_path, event_type):
-    pytesseract.pytesseract.tesseract_cmd = "./Tesseract-OCR/tesseract.exe"
+    pytesseract.pytesseract.tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe" # adjust to wherever tesseract is stored on your device
     image = Image.open(image_path)
     # Crop left region for rank
     rank_crop = image.crop((math.floor(0.025*image.width), math.floor(0.25*image.height), math.floor(0.12*image.width), math.floor(0.75*image.height)))  # adjust as needed
