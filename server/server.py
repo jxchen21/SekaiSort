@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from PIL import Image
+from PIL import Image, ImageDraw
 import pytesseract
 import math
 import os
 import io
+import shutil
+import numpy as np
 
 app = Flask(__name__, static_folder='static')
 CORS(app,
@@ -48,6 +50,8 @@ def sort_multiple_images():
     results = []
 
     upload_dir = 'static/uploads'
+    if os.path.exists(upload_dir):
+        shutil.rmtree(upload_dir)
     os.makedirs(upload_dir, exist_ok=True)
 
     for file in files:
@@ -74,18 +78,70 @@ def sort_multiple_images():
 def uploaded_file(filename):
     return send_from_directory('static/uploads', filename)
 
+def add_corners(image_path, rad):
+    circle = Image.new('L', (rad * 2, rad * 2), 0)
+    draw = ImageDraw.Draw(circle)
+    draw.ellipse((0, 0, rad * 2 - 1, rad * 2 - 1), fill=255)
+    alpha = Image.new('L', image_path.size, 255)
+    w, h = image_path.size
+    alpha.paste(circle.crop((0, 0, rad, rad)), (0, 0))
+    alpha.paste(circle.crop((0, rad, rad, rad * 2)), (0, h - rad))
+    alpha.paste(circle.crop((rad, 0, rad * 2, rad)), (w - rad, 0))
+    alpha.paste(circle.crop((rad, rad, rad * 2, rad * 2)), (w - rad, h - rad))
+    image_path.putalpha(alpha)
+    return image_path
+
+def extract_inside_static_pink(image_path, output_path, pink_rgb=[225,128,168], tolerance=30):
+    image = image_path.convert("RGBA")
+    data = np.array(image)
+
+    # Create a mask of all pixels matching the pink border color
+    pink_mask = (
+        (np.abs(data[:, :, 0] - pink_rgb[0]) < tolerance) &
+        (np.abs(data[:, :, 1] - pink_rgb[1]) < tolerance) &
+        (np.abs(data[:, :, 2] - pink_rgb[2]) < tolerance)
+    )
+    pink_coords = np.argwhere(pink_mask)
+
+    if pink_coords.size == 0:
+        print("❌ No pink border pixels found — check color and tolerance.")
+        return
+
+    # Find bounding box of pink region
+    y_pink, x_pink = pink_coords[:, 0], pink_coords[:, 1]
+    top, bottom = y_pink.min(), y_pink.max()
+    left, right = x_pink.min(), x_pink.max()
+
+    # Crop just inside the pink border
+    cropped = image.crop((left + 1, top + 1, right, bottom))
+    cropped = add_corners(cropped, math.floor(cropped.size[1]*0.15))
+    cropped.save(output_path)
+
 @app.route('/api/clean-images', methods=['POST'])
 def clean_images():
+
     if 'images' not in request.files:
         return jsonify({'error': 'No images provided'}), 400
     files = request.files.getlist('images')
     results = []
 
-    upload_dir = 'static/uploads'
-    os.makedirs(upload_dir, exist_ok=True)
+    output_dir = 'static/outputs'
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
+    counter = 0
     for file in files:
-        print('')
+        if file.filename == '':
+            continue
+        file.seek(0)
+        image_bytes = file.read()
+        image = Image.open(io.BytesIO(image_bytes))
+        extract_inside_static_pink(image, os.path.join(output_dir, f"img{counter}.png"))
+        results.append({
+            'image_url' : f'/static/outputs/img{counter}.png'
+        })
+        counter += 1
     return jsonify(results)
 
 
