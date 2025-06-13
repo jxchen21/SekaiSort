@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, send_file
+import zipfile
 from flask_cors import CORS
 from PIL import Image, ImageDraw
 import pytesseract
@@ -144,6 +145,28 @@ def clean_images():
         counter += 1
     return jsonify(results)
 
+@app.route('/static/outputs/<filename>')
+def output_file(filename):
+    return send_from_directory('static/outputs', filename)
+
+@app.route('/download/all', methods=['GET'])
+def download_all():
+    memory_file = io.BytesIO()
+    output_dir = 'static/outputs'
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for filename in os.listdir(output_dir):
+            file_path = os.path.join(output_dir, filename)
+            if os.path.isfile(file_path):
+                zf.write(file_path, filename)
+
+    memory_file.seek(0)
+
+    return send_file(
+        memory_file,
+        as_attachment=True,
+        download_name='processed_images.zip',
+        mimetype='application/zip'
+    )
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

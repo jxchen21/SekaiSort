@@ -2,6 +2,7 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import ListImage from './ListImage'
+import DownloadButton from './DownloadButton'
 interface props {
   script: string;
 }
@@ -54,7 +55,7 @@ export default function Dropzone(props: props) {
     clearFiles()
     console.log('Form Data Contents:');
     try {
-      const res = await fetch('http://localhost:8080/api/'+props.script, {
+      const res = await fetch(`http://localhost:8080/api/${props.script}`, {
         method: 'POST',
         body: formData
       });
@@ -98,7 +99,12 @@ export default function Dropzone(props: props) {
             <p>Cheerful Carnival?</p>
           </div>
         )
-      }
+    }
+    {
+        (props.script === "clean-images" && ranks.length > 0) && (
+          <DownloadButton />
+        )
+    }
     <div>
       {
         files.length > 0 && (
