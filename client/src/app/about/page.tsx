@@ -7,7 +7,7 @@ export default function About() {
         <br />
         {`Built with NextJS, Tailwind, Flask, and Tesseract.`}
         <br />
-        {`Saki best character btw`}
+        {`Saki best character btw :D`}
     </p>
     </>);
 }
