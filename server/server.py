@@ -8,6 +8,7 @@ import os
 import io
 import shutil
 import numpy as np
+import json
 
 app = Flask(__name__, static_folder='static')
 CORS(app,
@@ -21,6 +22,8 @@ def return_home():
         'message':'Hello world!'
     })
 
+# Local version of script that requires tesseract download; removed for web deployment
+'''
 def extract_text_from_image(image, event_type):
     pytesseract.pytesseract.tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe" # adjust to wherever tesseract is stored on your device
     # Crop left region for rank
@@ -40,16 +43,17 @@ def extract_text_from_image(image, event_type):
     name_crop = image.crop((namex, 0, math.floor(0.6*image.width), math.floor(0.4*image.height)))  # adjust as needed
     username = pytesseract.image_to_string(name_crop, config='--psm 7').strip()
     return (rank, username)
+'''
 
 @app.route('/api/sort-images', methods=['POST'])
 def sort_multiple_images():
+
     if 'images' not in request.files:
         return jsonify({'error': 'No images provided'}), 400
 
-    event_type = request.form.get('eventType')
     files = request.files.getlist('images')
+    files_data = json.loads(request.form['data'])
     results = []
-
     upload_dir = 'static/uploads'
     if os.path.exists(upload_dir):
         shutil.rmtree(upload_dir)
@@ -61,18 +65,16 @@ def sort_multiple_images():
         file.seek(0)
         image_bytes = file.read()
         image = Image.open(io.BytesIO(image_bytes))
-        result = extract_text_from_image(image, event_type)
         image_path = os.path.join(upload_dir, file.filename)
         image.save(image_path)
+    for file_data in files_data:
         results.append({
-            'filename': file.filename,
-            'tier': result[0],
-            'user': result[1],
-            'image_url': f'/static/uploads/{file.filename}'
-        })
-
-    results = sorted(results, key = lambda x: x['tier'])
-
+            'filename': file_data.get('filename'),
+            'rank' : int(file_data.get('rank')),
+            'user' : file_data.get('user'),
+            'image_url' : file_data.get('image_url')
+       })
+    results = sorted(results, key = lambda x: x['rank'])
     return jsonify(results)
 
 @app.route('/static/uploads/<filename>')

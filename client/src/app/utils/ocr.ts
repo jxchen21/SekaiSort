@@ -1,23 +1,4 @@
-import Tesseract, { createWorker } from 'tesseract.js';
-
-interface CropCoordinates {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface ImageDimensions {
-  width: number;
-  height: number;
-}
-
-interface OCRResult {
-  text: string;
-  confidence: number;
-  cropCoordinates: CropCoordinates;
-  originalDimensions: ImageDimensions;
-}
+import Tesseract from 'tesseract.js';
 
 /**
  * Extract rank from image using the same cropping logic as Python version

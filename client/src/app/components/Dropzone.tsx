@@ -41,16 +41,6 @@ export default function Dropzone(props: props) {
     }
   }
 
-  const extractRank = async (file: File) => {
-    const rank = await extractRankFromImage(file);
-    console.log(rank);
-  };
-
-  const extractUser = async(file: File) => {
-    const user = await extractUsernameFromImage(file, type);
-    console.log(user);
-  }
-
   const handleUpload = async () => {
 
     if (files.length === 0) {
@@ -75,17 +65,7 @@ export default function Dropzone(props: props) {
     }
     const jsonString = JSON.stringify(filesData);
     formData.append('data', jsonString);
-    for (let [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`${key}:`, {
-          name: value.name,
-          size: value.size,
-          type: value.type
-        });
-      } else {
-        console.log(`${key}:`, value);
-      }
-    }
+
     clearFiles();
 
     try {
@@ -106,7 +86,7 @@ export default function Dropzone(props: props) {
   }, []);
   const accept = { 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] }
 
-  const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop, accept
   });
 
