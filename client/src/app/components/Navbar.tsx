@@ -10,8 +10,8 @@ export default function Navbar() {
     const navLinks = [
         { href: '/home', label: 'Home' },
         { href: '/guide', label: 'Usage Guide'},
-        { href: '/sort-tiers', label: 'Sort Tiers' },
         { href: '/clean-tiers', label: 'Clean Tiers' },
+        { href: '/sort-tiers', label: 'Sort Tiers' },
         { href: '/about', label: 'About'}
     ]
     function toggleShow() {
