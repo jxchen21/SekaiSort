@@ -8,7 +8,7 @@ export default function Navbar() {
     const navLinks = [
         { href: '/home', label: 'Home' },
         { href: '/guide', label: 'Usage Guide'},
-        { href: '/order-tiers', label: 'Order Tiers' },
+        { href: '/sort-tiers', label: 'Sort Tiers' },
         { href: '/clean-tiers', label: 'Clean Tiers' },
         { href: '/about', label: 'About'}
     ]

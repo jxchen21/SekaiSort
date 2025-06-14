@@ -1,9 +1,9 @@
 import Dropzone from '../components/Dropzone'
+import Image from 'next/image'
 export default function CleanTiers() {
     return (
     <>
-    <div className="flex flex-col justify-center items-center px-10 py-10">
-        <Dropzone script='clean-images' />
-    </div>
+    <Image src={'/images/clean_tiers.png'} alt="Guide" width={250} height={50} className="mb-5"/>
+    <Dropzone script='clean-images' />
     </>);
 }
