@@ -148,7 +148,7 @@ def clean_images():
 def output_file(filename):
     return send_from_directory('static/outputs', filename)
 
-@app.route('/download/all', methods=['GET'])
+@app.route('/api/download/all', methods=['GET'])
 def download_all():
     memory_file = io.BytesIO()
     output_dir = 'static/outputs'
