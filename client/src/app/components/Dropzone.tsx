@@ -11,7 +11,7 @@ interface props {
 
 
 export default function Dropzone(props: props) {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_BASE_URL = "http://sekai-sort-server.up.railway.app";
   interface Rank {
     filename: string;
     tier: number;
