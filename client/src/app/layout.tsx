@@ -31,7 +31,9 @@ export default function RootLayout({
       >
       <div className="w-[100vw] h-[100vh] bg-light-blue/50 ">
         <Navbar />
-        {children}
+        <div className="flex flex-col justify-center items-center mt-15">
+          {children}
+        </div>
       </div>
       </body>
     </html>
