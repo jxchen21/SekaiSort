@@ -1,11 +1,5 @@
 flask
-zipfile
 flask_cors
 PIL
 pytesseract
-math
-os
-io
-shutil
 numpy
-json
