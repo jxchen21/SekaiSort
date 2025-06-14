@@ -9,4 +9,6 @@ ProcessTier: Uses Tesseract OCR to extract rank and username from screenshot, re
 
 NextJS App: Complete! Catch it live at https://sekaisort-production.up.railway.app
 
+DESPITE what the GitHub Breakdown says, this project was build with NextJS with Tailwind and a Flask backend, and I'm pretty sure there's more JavaScript than python.. :(
+
 Made with 💖 by Arctic
