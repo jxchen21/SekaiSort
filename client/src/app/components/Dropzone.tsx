@@ -3,10 +3,15 @@ import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import ListImage from './ListImage'
 import DownloadButton from './DownloadButton'
+import { extractRankFromImage, extractUsernameFromImage } from '../utils/ocr'
+
 interface props {
   script: string;
 }
+
+
 export default function Dropzone(props: props) {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   interface Rank {
     filename: string;
     tier: number;
@@ -35,6 +40,17 @@ export default function Dropzone(props: props) {
       setType("mara");
     }
   }
+
+  const extractRank = async (file: File) => {
+    const rank = await extractRankFromImage(file);
+    console.log(rank);
+  };
+
+  const extractUser = async(file: File) => {
+    const user = await extractUsernameFromImage(file, type);
+    console.log(user);
+  }
+
   const handleUpload = async () => {
 
     if (files.length === 0) {
@@ -43,19 +59,37 @@ export default function Dropzone(props: props) {
     }
 
     const formData = new FormData();
+    const filesData = [];
 
-    if (props.script === "sort-images"){
-      console.log(type);
-      formData.append('eventType', type);
-    }
-
-    files.forEach((file) => {
+    for (const file of files) {
+      const rank = await extractRankFromImage(file);
+      const user = await extractUsernameFromImage(file, type);
       formData.append('images', file);
-    });
-    clearFiles()
-    console.log('Form Data Contents:');
+      const fileData = {
+        filename: file.name,
+        rank: rank,
+        user: user,
+        image_url: `/static/uploads/${file.name}`
+      }
+      filesData.push(fileData);
+    }
+    const jsonString = JSON.stringify(filesData);
+    formData.append('data', jsonString);
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`${key}:`, {
+          name: value.name,
+          size: value.size,
+          type: value.type
+        });
+      } else {
+        console.log(`${key}:`, value);
+      }
+    }
+    clearFiles();
+
     try {
-      const res = await fetch(`http://localhost:8080/api/${props.script}`, {
+      const res = await fetch(`${API_BASE_URL}/api/${props.script}`, {
         method: 'POST',
         body: formData
       });
@@ -68,7 +102,6 @@ export default function Dropzone(props: props) {
   }
 
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
-    console.log('dropped!');
     setFiles(acceptedFiles);
   }, []);
   const accept = { 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] }
@@ -119,7 +152,7 @@ export default function Dropzone(props: props) {
       )}
       {ranks.map((item, index) => (
         <img key={index}
-          src={`http://localhost:8080${item.image_url}`}
+          src={`${API_BASE_URL}${item.image_url}`}
           alt={item.filename}
           className="max-w-md my-5"
         />

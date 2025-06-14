@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 
 export default function DownloadButton() {
     const [isDownloading, setIsDownloading] = useState(false);
-
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
     const downloadZip = async () => {
+
         setIsDownloading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/download/all');
+            const response = await fetch(`${API_BASE_URL}/download/all`);
 
             if (!response.ok) {
                 throw new Error('Download failed');
