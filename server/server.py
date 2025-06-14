@@ -137,9 +137,9 @@ def clean_images():
         file.seek(0)
         image_bytes = file.read()
         image = Image.open(io.BytesIO(image_bytes))
-        extract_inside_static_pink(image, os.path.join(output_dir, f"img{counter}.png"))
+        extract_inside_static_pink(image, os.path.join(output_dir, f"{file.filename}.png"))
         results.append({
-            'image_url' : f'/static/outputs/img{counter}.png'
+            'image_url' : f'/static/outputs/{file.filename}.png'
         })
         counter += 1
     return jsonify(results)
