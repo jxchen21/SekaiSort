@@ -11,10 +11,7 @@ import numpy as np
 import json
 
 app = Flask(__name__, static_folder='static')
-CORS(app,
-     origins=["http://localhost:3000"],
-     methods=["GET", "POST", "OPTIONS"],
-     allow_headers=["Content-Type", "Authorization"])
+CORS(app)
 
 @app.route("/api/home", methods=['GET'])
 def return_home():
@@ -171,4 +168,6 @@ def download_all():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    #app.run(debug=True, port=8080)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
