@@ -4,3 +4,12 @@
     --color-mid-blue: #5B9AC0;
     --color-light-blue: #C3E4EB;
 }
+
+@font-face {
+  font-family: 'antipasto';
+  src: url('/fonts/antipasto.regular.ttf');
+ }
+
+body {
+ font-family: 'antipasto';
+}

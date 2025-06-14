@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
 
-export default function Home() {
-  redirect("/order-tiers");
+export default function Index() {
+  redirect("/home");
 }

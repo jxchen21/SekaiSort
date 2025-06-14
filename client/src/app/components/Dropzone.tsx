@@ -92,17 +92,17 @@ export default function Dropzone(props: props) {
 
   return (
     <>
-    <div {...getRootProps()}>
+    <div className='flex rounded-4xl bg-white w-[50vw] h-[20vh] items-center justify-center cursor-pointer' {...getRootProps()}>
       <input name="images" {...getInputProps()} />
         {
           isDragActive ?
-            <p className='bg-blue-200 my-10'>Drop the files here ...</p> :
-            <p className='bg-blue-200 my-10'>Drop or click to select files</p>
+            <p className='text-center'>Drop the files here ...</p> :
+            <p className='text-center'>Drop or click to select files</p>
         }
     </div>
-    <div className="flex flex-row justify-center items-center mb-5">
-      <button onClick={handleUpload} className="bg-blue-300 px-4 py-2 mr-10">Upload</button>
-      <button onClick={clearAll} className="bg-blue-300 px-4 py-2">Clear All</button>
+    <div className="flex flex-row justify-center items-center mb-5 mt-5">
+      <button onClick={handleUpload} className="bg-blue-300 rounded-2xl px-4 py-2 mr-10 hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">Upload</button>
+      <button onClick={clearAll} className="bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">Clear All</button>
 
     </div>
     {
