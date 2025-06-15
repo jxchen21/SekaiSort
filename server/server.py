@@ -7,7 +7,7 @@ import shutil
 import json
 
 app = Flask(__name__, static_folder='static')
-CORS(app, origins=['http://localhost:3000'])
+CORS(app)
 
 @app.route('/api/detect-crown', methods=['POST'])
 def detect_crown():
@@ -181,6 +181,6 @@ def download_all():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
-    #port = int(os.environ.get('PORT', 5000))
-    #app.run(host='0.0.0.0', port=port)
+    #app.run(debug=True, port=8080)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
