@@ -5,7 +5,7 @@ A Python-based tier-processing tool for Project Sekai: Colorful Stage! Upload yo
 
 CleanImage: Crops tier screenshot to desired size and removes background
 
-ProcessTier: Uses Tesseract OCR to extract rank and username from screenshot, returns sorted results.
+ProcessTier: Uses Tesseract OCR with OpenCV to extract rank and username from screenshot, returns sorted results.
 
 NextJS App: Complete! Catch it live at https://sekaisort-production.up.railway.app
 
