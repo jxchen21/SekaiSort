@@ -5,6 +5,12 @@ import Tesseract from 'tesseract.js';
  */
 //const API_BASE_URL =  process.env.NEXT_PUBLIC_API_URL;
 const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
+
+interface TesseractOptions {
+  tessedit_pageseg_mode?: string;
+  tessedit_char_whitelist?: string;
+}
+
 async function detectCrown(imageFile: File): Promise<boolean> {
   console.log("Checking for crown");
   try {
@@ -74,7 +80,7 @@ export async function extractRankFromImage(imageFile: File): Promise<string> {
         ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
         let finalCanvas = canvas;
-        let ocrConfig = 'eng'; // Default Tesseract config
+        const ocrConfig = 'eng'; // Default Tesseract config
 
         if (hasCrown) {
           // Crown detected - crop to center area where number appears in crown
@@ -106,7 +112,7 @@ export async function extractRankFromImage(imageFile: File): Promise<string> {
         }
 
         // Run OCR with appropriate configuration
-        let tesseractOptions: any = {};
+        let tesseractOptions: TesseractOptions = {};
         if (hasCrown) {
           tesseractOptions = {
             tessedit_pageseg_mode: '10', // Single character (PSM 10)
