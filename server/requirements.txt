@@ -3,4 +3,4 @@ flask_cors
 Pillow
 pytesseract
 numpy
-opencv-python
+opencv-python-headless

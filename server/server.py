@@ -43,8 +43,6 @@ def detect_crown():
 
     crown_mask = cv2.bitwise_or(cv2.bitwise_or(gold_mask, silver_mask), bronze_mask)
     has_crown = cv2.countNonZero(crown_mask) > 50
-    if(has_crown):
-        print("Crown")
     return jsonify({'hasCrown': has_crown})
 
 @app.route('/api/sort-images', methods=['POST'])
