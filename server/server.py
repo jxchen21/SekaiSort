@@ -1,13 +1,9 @@
 from flask import Flask, request, jsonify, send_from_directory, send_file
-import zipfile
 from flask_cors import CORS
-from PIL import Image, ImageDraw
-import pytesseract
 import math
 import os
 import io
 import shutil
-import numpy as np
 import json
 
 app = Flask(__name__, static_folder='static')
@@ -19,32 +15,9 @@ def return_home():
         'message':'Hello world!'
     })
 
-# Local version of script that requires tesseract download; removed for web deployment
-'''
-def extract_text_from_image(image, event_type):
-    pytesseract.pytesseract.tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe" # adjust to wherever tesseract is stored on your device
-    # Crop left region for rank
-    rank_crop = image.crop((math.floor(0.025*image.width), math.floor(0.25*image.height), math.floor(0.12*image.width), math.floor(0.75*image.height)))  # adjust as needed
-    rank = pytesseract.image_to_string(rank_crop, config='--psm 7').strip()
-    try:
-        rank = int(rank)
-    except:
-        print("❌ Error: Integer rank not found")
-        return
-    # Crop center region for name
-    namex = 0
-    if(event_type.lower() == "mara"):
-        namex = math.floor(0.21*image.width)
-    else:
-        namex = math.floor(0.25*image.width)
-    name_crop = image.crop((namex, 0, math.floor(0.6*image.width), math.floor(0.4*image.height)))  # adjust as needed
-    username = pytesseract.image_to_string(name_crop, config='--psm 7').strip()
-    return (rank, username)
-'''
-
 @app.route('/api/sort-images', methods=['POST'])
 def sort_multiple_images():
-
+    from PIL import Image
     if 'images' not in request.files:
         return jsonify({'error': 'No images provided'}), 400
 
@@ -79,6 +52,7 @@ def uploaded_file(filename):
     return send_from_directory('static/uploads', filename)
 
 def add_corners(image_path, rad):
+    from PIL import Image, ImageDraw
     circle = Image.new('L', (rad * 2, rad * 2), 0)
     draw = ImageDraw.Draw(circle)
     draw.ellipse((0, 0, rad * 2 - 1, rad * 2 - 1), fill=255)
@@ -92,6 +66,7 @@ def add_corners(image_path, rad):
     return image_path
 
 def extract_inside_static_pink(image_path, output_path, pink_rgb=[225,128,168], tolerance=30):
+    import numpy as np
     image = image_path.convert("RGBA")
     data = np.array(image)
 
@@ -119,7 +94,7 @@ def extract_inside_static_pink(image_path, output_path, pink_rgb=[225,128,168], 
 
 @app.route('/api/clean-images', methods=['POST'])
 def clean_images():
-
+    from PIL import Image
     if 'images' not in request.files:
         return jsonify({'error': 'No images provided'}), 400
     files = request.files.getlist('images')
@@ -150,6 +125,7 @@ def output_file(filename):
 
 @app.route('/api/download/all', methods=['GET'])
 def download_all():
+    import zipfile
     memory_file = io.BytesIO()
     output_dir = 'static/outputs'
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
