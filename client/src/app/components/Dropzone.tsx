@@ -103,25 +103,24 @@ export default function Dropzone(props: props) {
         <input name="images" {...getInputProps()} />
           {
             loading?
-              <p className='font-semibold text-center text-xl'>Loading...</p>
+              <p className='text-center text-xl'>Loading...</p>
             :
             (isDragActive ?
-              <p className='font-semibold text-center text-xl'>Drop the files here ...</p> :
-              <p className='font-semibold text-center text-xl'>Drop or click to select files</p>)
+              <p className='text-center text-xl'>Drop the files here ...</p> :
+              <p className='text-center text-xl'>Drop or click to select files</p>)
           }
       </div>
       {
           props.script === "sort-images" && (
-            <div className="flex flex-row mt-5">
+            <div className="flex flex-row mt-[2vh]">
               <input type="checkbox" onChange={checked} className="mr-5" />
               <p className="font-semibold">Cheerful Carnival?</p>
             </div>
           )
       }
-      <div className="flex flex-row justify-center items-center mb-5 mt-5">
-        <button onClick={handleUpload} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 mr-10 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Upload</button>
-        <button onClick={clearAll} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Clear All</button>
-
+      <div className="flex flex-row justify-center items-center mb-[2vh] mt-[1vh]">
+        <button onClick={handleUpload} className="text-lg font-semibold bg-blue-300 rounded-2xl px-4 py-2 mr-10 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Upload</button>
+        <button onClick={clearAll} className="text-lg font-semibold bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Clear All</button>
       </div>
       {
           (ranks.length > 0) && (
@@ -129,7 +128,7 @@ export default function Dropzone(props: props) {
           )
       }
     </div>
-    <div>
+    <div className={`${ files.length == 0 && ranks.length == 0 ? 'hidden' : ''} flex flex-col items-center bg-white rounded-4xl w-[50vw] p-5 mt-[2vh] mb-[2vh]`}>
       {
         files.length > 0 && (
         <div className="flex flex-col justify-center items-center">
@@ -146,9 +145,9 @@ export default function Dropzone(props: props) {
         <img key={index}
           src={`${API_BASE_URL}${item.image_url}`}
           alt={item.filename}
-          className="max-w-md my-5"
+          className="my-1"
         />
-    ))}
+      ))}
     </div>
     </>
   )

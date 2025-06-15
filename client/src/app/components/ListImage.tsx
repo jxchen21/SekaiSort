@@ -6,8 +6,8 @@ interface props {
 export default function ListImage(props : props) {
     return(
         <>
-            <li className="flex flex-row justify-center items-center">
-                <button id="xMark" onClick={props.handler} className="mr-5">&#x2715;</button>
+            <li className="flex flex-row items-center">
+                <button id="xMark" onClick={props.handler} className="mr-5 hover:text-mid-blue">&#x2715;</button>
                 <p>{props.text}</p>
             </li>
         </>

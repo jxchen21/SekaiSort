@@ -29,7 +29,7 @@ export default function RootLayout({
           backgroundPosition: 'center'
         }}
       >
-      <div className="w-[100vw] h-[100vh] bg-light-blue/50 ">
+      <div className="max-w-[100vw] h-[100vh] bg-light-blue/50 ">
         <Navbar />
         <div className="flex flex-col justify-center items-center mt-15">
           {children}

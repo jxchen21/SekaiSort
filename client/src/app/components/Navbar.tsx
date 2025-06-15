@@ -26,7 +26,7 @@ export default function Navbar() {
           <Link
             key={link.href}
             href={link.href}
-            className={pathname === link.href ? 'px-5 w-[100%] md:border-t-0 border-t-1 text-mid-blue md:mr-[1vw] text-xl text-center' : ' px-5 w-[100%] md:border-t-0 border-t-1 text-center text-lg md:mr-[1vw] hover:text-mid-blue transition-all duration-300 ease-in-out'}
+            className={pathname === link.href ? 'px-5 w-[100%] md:border-t-0 border-t-1 text-mid-blue md:mr-[1vw] text-lg text-center' : ' px-5 w-[100%] md:border-t-0 border-t-1 text-center text-lg md:mr-[1vw] hover:text-mid-blue transition-all duration-300 ease-in-out'}
           >
             {link.label}
           </Link>
