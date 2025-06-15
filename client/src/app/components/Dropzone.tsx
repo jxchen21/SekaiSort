@@ -22,6 +22,7 @@ export default function Dropzone(props: props) {
   const [ranks, setRanks] = useState<Rank[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [type, setType] = useState("mara");
+  const [loading, setLoading] = useState(false);
 
   function removeFile(id : number) {
     console.log(id);
@@ -41,14 +42,14 @@ export default function Dropzone(props: props) {
       setType("mara");
     }
   }
-
   const handleUpload = async () => {
 
     if (files.length === 0) {
       alert("Please select a file to upload!");
       return;
     }
-
+    setLoading(true);
+    console.log(loading);
     const formData = new FormData();
     const filesData = [];
 
@@ -77,6 +78,7 @@ export default function Dropzone(props: props) {
       const results = await res.json();
       console.log('All results:', results);
       setRanks(results);
+      setLoading(false);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -89,37 +91,44 @@ export default function Dropzone(props: props) {
   const accept = { 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop, accept
+    onDrop,
+    accept,
+    disabled: loading
   });
 
   return (
     <>
-    <div className='flex rounded-4xl bg-white w-[50vw] h-[20vh] items-center justify-center hover:bg-blue-100 cursor-pointer  transition-all duration-300 ease-in-out' {...getRootProps()}>
-      <input name="images" {...getInputProps()} />
-        {
-          isDragActive ?
-            <p className='font-semibold text-center text-xl'>Drop the files here ...</p> :
-            <p className='font-semibold text-center text-xl'>Drop or click to select files</p>
-        }
-    </div>
-    <div className="flex flex-row justify-center items-center mb-5 mt-5">
-      <button onClick={handleUpload} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 mr-10 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Upload</button>
-      <button onClick={clearAll} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Clear All</button>
+    <div className="flex flex-col items-center justify-center">
+      <div className='flex rounded-4xl bg-white w-[50vw] h-[20vh] items-center justify-center hover:bg-blue-100 cursor-pointer  transition-all duration-300 ease-in-out' {...getRootProps()}>
+        <input name="images" {...getInputProps()} />
+          {
+            loading?
+              <p className='font-semibold text-center text-xl'>Loading...</p>
+            :
+            (isDragActive ?
+              <p className='font-semibold text-center text-xl'>Drop the files here ...</p> :
+              <p className='font-semibold text-center text-xl'>Drop or click to select files</p>)
+          }
+      </div>
+      {
+          props.script === "sort-images" && (
+            <div className="flex flex-row mt-5">
+              <input type="checkbox" onChange={checked} className="mr-5" />
+              <p className="font-semibold">Cheerful Carnival?</p>
+            </div>
+          )
+      }
+      <div className="flex flex-row justify-center items-center mb-5 mt-5">
+        <button onClick={handleUpload} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 mr-10 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Upload</button>
+        <button onClick={clearAll} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Clear All</button>
 
+      </div>
+      {
+          (ranks.length > 0) && (
+            <DownloadButton />
+          )
+      }
     </div>
-    {
-        props.script === "sort-images" && (
-          <div className="flex flex-row">
-            <input type="checkbox" onChange={checked} className="mr-5" />
-            <p className="font-semibold">Cheerful Carnival?</p>
-          </div>
-        )
-    }
-    {
-        (ranks.length > 0) && (
-          <DownloadButton />
-        )
-    }
     <div>
       {
         files.length > 0 && (
@@ -132,7 +141,8 @@ export default function Dropzone(props: props) {
           </ul>
         </div>
       )}
-      {ranks.map((item, index) => (
+      {
+        (ranks.length > 0) && ranks.map((item, index) => (
         <img key={index}
           src={`${API_BASE_URL}${item.image_url}`}
           alt={item.filename}

@@ -36,7 +36,7 @@ export default function DownloadButton() {
         <button
             onClick={downloadZip}
             disabled={isDownloading}
-            className="download-btn"
+            className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out"
         >
             {isDownloading ? 'Downloading...' : 'Download All Images'}
         </button>
