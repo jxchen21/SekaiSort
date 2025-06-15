@@ -45,8 +45,8 @@ def extract_text_from_image(image_path, event_type):
         # Crop to center area of the rank region where number appears in crown
         crown_h, crown_w = rank_crop.height, rank_crop.width
         number_crop = rank_crop.crop((
-            math.floor(crown_w * 0.3), math.floor(crown_h * 0.3),
-            math.floor(crown_w * 0.7), crown_h
+            math.floor(crown_w * 0.3), math.floor(crown_h * 0.4),
+            math.floor(crown_w * 0.6), crown_h
         ))
         number_crop.save(f"debug_crown_crop.png")
         rank = pytesseract.image_to_string(number_crop, config='--psm 10 -c tessedit_char_whitelist=123').strip()

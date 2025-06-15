@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 
 export default function DownloadButton() {
     const [isDownloading, setIsDownloading] = useState(false);
-    //const API_BASE_URL =  process.env.NEXT_PUBLIC_API_URL;
-    const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
+    const API_BASE_URL =  process.env.NEXT_PUBLIC_API_URL;
+    //const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
     const downloadZip = async () => {
 
         setIsDownloading(true);

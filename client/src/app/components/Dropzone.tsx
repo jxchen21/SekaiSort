@@ -11,8 +11,8 @@ interface props {
 
 
 export default function Dropzone(props: props) {
-  //const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-  const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  //const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
   interface Rank {
     filename: string;
     tier: number;
@@ -55,12 +55,12 @@ export default function Dropzone(props: props) {
     for (const file of files) {
       const rank = await extractRankFromImage(file);
       const user = await extractUsernameFromImage(file, type);
+      console.log(rank, user);
       formData.append('images', file);
       const fileData = {
         filename: file.name,
         rank: rank,
         user: user,
-        image_url: `/static/uploads/${file.name}`
       }
       filesData.push(fileData);
     }
@@ -83,6 +83,7 @@ export default function Dropzone(props: props) {
   }
 
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
+    clearAll();
     setFiles(acceptedFiles);
   }, []);
   const accept = { 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] }
@@ -115,7 +116,7 @@ export default function Dropzone(props: props) {
         )
     }
     {
-        (props.script === "clean-images" && ranks.length > 0) && (
+        (ranks.length > 0) && (
           <DownloadButton />
         )
     }

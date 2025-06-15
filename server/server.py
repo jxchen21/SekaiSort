@@ -7,13 +7,45 @@ import shutil
 import json
 
 app = Flask(__name__, static_folder='static')
-CORS(app)
+CORS(app, origins=['http://localhost:3000'])
 
-@app.route("/api/home", methods=['GET'])
-def return_home():
-    return jsonify({
-        'message':'Hello world!'
-    })
+@app.route('/api/detect-crown', methods=['POST'])
+def detect_crown():
+    import cv2
+    import numpy as np
+    import base64
+    from io import BytesIO
+    from PIL import Image
+    # Get image from request
+    image_data = request.json['image']  # base64 encoded
+
+    # Decode image
+    image_bytes = base64.b64decode(image_data.split(',')[1])
+    image = Image.open(BytesIO(image_bytes))
+
+    # Use your existing crop logic
+    rank_crop = image.crop((
+        math.floor(0.025*image.width),
+        math.floor(0.25*image.height),
+        math.floor(0.12*image.width),
+        math.floor(0.75*image.height)
+    ))
+
+    # Check for crown (your existing logic)
+    rank_cv = cv2.cvtColor(np.array(rank_crop), cv2.COLOR_RGB2BGR)
+
+    gold_mask = cv2.inRange(cv2.cvtColor(rank_cv, cv2.COLOR_BGR2HSV),
+                           np.array([40, 100, 150]), np.array([50, 200, 220]))
+    silver_mask = cv2.inRange(rank_cv,
+                             np.array([170, 160, 180]), np.array([210, 200, 220]))
+    bronze_mask = cv2.inRange(cv2.cvtColor(rank_cv, cv2.COLOR_BGR2HSV),
+                             np.array([15, 80, 150]), np.array([25, 180, 220]))
+
+    crown_mask = cv2.bitwise_or(cv2.bitwise_or(gold_mask, silver_mask), bronze_mask)
+    has_crown = cv2.countNonZero(crown_mask) > 50
+    if(has_crown):
+        print("Crown")
+    return jsonify({'hasCrown': has_crown})
 
 @app.route('/api/sort-images', methods=['POST'])
 def sort_multiple_images():
@@ -24,10 +56,11 @@ def sort_multiple_images():
     files = request.files.getlist('images')
     files_data = json.loads(request.form['data'])
     results = []
-    upload_dir = 'static/uploads'
-    if os.path.exists(upload_dir):
-        shutil.rmtree(upload_dir)
-    os.makedirs(upload_dir, exist_ok=True)
+
+    output_dir = 'static/outputs'
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
     for file in files:
         if file.filename == '':
@@ -35,15 +68,19 @@ def sort_multiple_images():
         file.seek(0)
         image_bytes = file.read()
         image = Image.open(io.BytesIO(image_bytes))
-        image_path = os.path.join(upload_dir, file.filename)
+        save_name = ""
+        for file_data in files_data:
+            if (file_data.get('filename') == file.filename):
+                save_name=f"t{file_data.get('rank')}_{file_data.get('user')}.png"
+                results.append({
+                    'filename': save_name,
+                    'rank' : int(file_data.get('rank')),
+                    'user' : file_data.get('user'),
+                    'image_url' : f"/{output_dir}/{save_name}"
+                })
+                break
+        image_path = os.path.join(output_dir, save_name)
         image.save(image_path)
-    for file_data in files_data:
-        results.append({
-            'filename': file_data.get('filename'),
-            'rank' : int(file_data.get('rank')),
-            'user' : file_data.get('user'),
-            'image_url' : file_data.get('image_url')
-       })
     results = sorted(results, key = lambda x: x['rank'])
     return jsonify(results)
 
@@ -144,6 +181,6 @@ def download_all():
     )
 
 if __name__ == "__main__":
-    #app.run(debug=True, port=8080)
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, port=8080)
+    #port = int(os.environ.get('PORT', 5000))
+    #app.run(host='0.0.0.0', port=port)
