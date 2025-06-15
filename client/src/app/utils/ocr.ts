@@ -3,8 +3,8 @@ import Tesseract from 'tesseract.js';
 /**
  * Check if image contains a crown by calling the server endpoint
  */
-const API_BASE_URL =  process.env.NEXT_PUBLIC_API_URL;
-//const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
+//const API_BASE_URL =  process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = "https://sekai-sort-server.up.railway.app"
 async function detectCrown(imageFile: File): Promise<boolean> {
   console.log("Checking for crown");
   try {
