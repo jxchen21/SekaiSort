@@ -34,12 +34,13 @@ export default function Guide() {
     }
 
     return (<>
-        <Image src={'/images/usageguide.png'} alt="Guide" width={300} height={50} className="mb-5"/>
+        <Image src={'/images/usageguide.png'} alt="Guide" width={300} height={50} className="mb-5 h-[15%]"/>
         <p className="bg-white w-[75%] rounded-2xl px-10 py-5 mt-[2vh] text-mid-blue text-lg md:text-xl text-center mb-[1vh]">
             sekai.sort has two utilities available: image cleaning and sorting! See below for demonstrations and usage tips.
         </p>
-        <div className="flex md:flex-row flex-col mb-10 w-[75%] items-center justify-center">
-            <div className="relative w-[100%] bg-white md:w-[35%] h-[20vh] md:h-[50vh] rounded-2xl px-10 py-5">
+        <div className="flex md:flex-row flex-col mb-10 md:h-[50vh] w-[75%] items-center justify-center">
+            <Image src={`/images/${image}.png`} alt="Demo" width={800} height={100} className={`mb-[1vh] md:mb-[0] rounded-2xl w-[100%] md:h-[100%] md:mr-[5%] transition-opacity duration-500 ${isLoading ? 'opacity-50' : 'opacity-100'}`} />
+            <div className="relative w-[100%] bg-white md:w-[35%] h-[20vh] md:h-[100%] rounded-2xl px-10 py-5">
                 <p className="whitespace-pre-line overflow-y-auto overflow-x-hidden whitespace-normal break-words max-h-[75%] max-w-[100%] text-mid-blue text-lg md:text-xl">
                 {
                     desc
@@ -50,7 +51,6 @@ export default function Guide() {
                     <button onClick={setSort} className="font-semibold bg-blue-300 rounded-2xl px-4 py-2 hover:bg-blue-200 cursor-pointer transition-all duration-300 ease-in-out">Sorting</button>
                 </div>
             </div>
-            <Image src={`/images/${image}.png`} alt="Demo" width={800} height={100} className={`mt-[1vh] md:mt-[0] rounded-2xl w-[100%] md:w-[60%] md:ml-[5%] transition-opacity duration-500 ${isLoading ? 'opacity-50' : 'opacity-100'}`} />
         </div>
 
     </>);
