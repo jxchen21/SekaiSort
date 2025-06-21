@@ -21,7 +21,7 @@ def extract_text_from_image(image_path, event_type):
     image = Image.open(image_path)
 
     # Crop left region for rank
-    rank_crop = image.crop((math.floor(0.025*image.width), math.floor(0.25*image.height), math.floor(0.12*image.width), math.floor(0.75*image.height)))
+    rank_crop = image.crop((math.floor(0.02*image.width), math.floor(0.25*image.height), math.floor(0.12*image.width), math.floor(0.75*image.height)))
 
     # Check if there's a crown (look for gold, silver, or bronze colors)
     rank_cv = cv2.cvtColor(np.array(rank_crop), cv2.COLOR_RGB2BGR)

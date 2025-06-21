@@ -1,6 +1,9 @@
-1: 1A] ulty
-1128: [R11A] Anula
-2022: Akiyama Yumi
-3129: [R11A] kaguya
-3944: [R11A] Saren
-4828: Rise of the World
+1: [R1 1A] ulty
+2: [R1 1A] koko!
+3: -[R11A] Navi
+1128: | ([R11A] Anula
+2022: Fay Akiyama Yumi
+3129: | [R11A] kaguya
+3944: =] [R11A] Saren
+4828: | Rise of the World
+61433: Rise of the World

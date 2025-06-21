@@ -83,7 +83,7 @@ export async function extractRankFromImage(imageFile: File): Promise<string> {
         console.log(hasCrown ? "Crown detected" : "No crown detected");
 
         // Calculate initial crop coordinates (same as Python)
-        const cropX = Math.floor(0.025 * img.width);
+        const cropX = Math.floor(0.02 * img.width);
         const cropY = Math.floor(0.25 * img.height);
         const cropWidth = Math.floor(0.12 * img.width) - cropX;
         const cropHeight = Math.floor(0.75 * img.height) - cropY;
