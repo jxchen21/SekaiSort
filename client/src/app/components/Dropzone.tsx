@@ -54,17 +54,22 @@ export default function Dropzone(props: props) {
     const filesData = [];
 
     for (const file of files) {
-      const rank = await extractRankFromImage(file);
-      const user = await extractUsernameFromImage(file, type);
-      console.log(rank, user);
-      formData.append('images', file);
-      const fileData = {
-        filename: file.name,
-        rank: rank,
-        user: user,
+      if (props.script === "sort-tiers"){
+        const rank = await extractRankFromImage(file);
+        const user = await extractUsernameFromImage(file, type);
+        const fileData = {
+          filename: file.name,
+          rank: rank,
+          user: user,
+        }
+        filesData.push(fileData);
+        console.log(rank, user);
       }
-      filesData.push(fileData);
+
+      formData.append('images', file);
+      console.log(`Uploaded ${file.name}`)
     }
+
     const jsonString = JSON.stringify(filesData);
     formData.append('data', jsonString);
 
