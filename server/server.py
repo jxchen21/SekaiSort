@@ -45,7 +45,7 @@ def detect_crown():
     has_crown = cv2.countNonZero(crown_mask) > 50
     return jsonify({'hasCrown': has_crown})
 
-@app.route('/api/sort-images', methods=['POST'])
+@app.route('/api/sort-tiers', methods=['POST'])
 def sort_multiple_images():
     from PIL import Image
     if 'images' not in request.files:
@@ -127,7 +127,7 @@ def extract_inside_static_pink(image_path, output_path, pink_rgb=[225,128,168], 
     cropped = add_corners(cropped, math.floor(cropped.size[1]*0.15))
     cropped.save(output_path)
 
-@app.route('/api/clean-images', methods=['POST'])
+@app.route('/api/clean-tiers', methods=['POST'])
 def clean_images():
     from PIL import Image
     if 'images' not in request.files:

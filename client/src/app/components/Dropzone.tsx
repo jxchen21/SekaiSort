@@ -116,7 +116,7 @@ export default function Dropzone(props: props) {
           }
       </div>
       {
-          props.script === "sort-images" && (
+          props.script === "sort-tiers" && (
             <div className="flex flex-row mt-[2vh]">
               <input type="checkbox" onChange={checked} className="mr-5" />
               <p className="font-semibold">Cheerful Carnival?</p>
