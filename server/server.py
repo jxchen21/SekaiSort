@@ -5,9 +5,14 @@ import os
 import io
 import shutil
 import json
+import re
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
+
+@app.route('/test', methods=['GET'])
+def test():
+    return jsonify({"status": "working"})
 
 @app.route('/api/detect-crown', methods=['POST'])
 def detect_crown():
@@ -70,6 +75,7 @@ def sort_multiple_images():
         for file_data in files_data:
             if (file_data.get('filename') == file.filename):
                 save_name=f"t{file_data.get('rank')}_{file_data.get('user')}.png"
+                save_name = re.sub(r'[\\/:*?"<>|]', '_', save_name)
                 results.append({
                     'filename': save_name,
                     'rank' : int(file_data.get('rank')),

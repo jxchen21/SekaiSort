@@ -86,6 +86,8 @@ export default function Dropzone(props: props) {
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
+      alert(`Error: ${error} - Please contact Arctic for help!`);
+      setLoading(false);
     }
   }
 
