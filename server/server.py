@@ -10,10 +10,6 @@ import re
 app = Flask(__name__, static_folder='static')
 CORS(app)
 
-@app.route('/test', methods=['GET'])
-def test():
-    return jsonify({"status": "working"})
-
 @app.route('/api/detect-crown', methods=['POST'])
 def detect_crown():
     import cv2
@@ -153,9 +149,10 @@ def clean_images():
         file.seek(0)
         image_bytes = file.read()
         image = Image.open(io.BytesIO(image_bytes))
-        extract_inside_static_pink(image, os.path.join(output_dir, f"{file.filename}"))
+        new_path = file.filename.split(".")[0] + ".png"
+        extract_inside_static_pink(image, os.path.join(output_dir, new_path))
         results.append({
-            'image_url' : f'/static/outputs/{file.filename}'
+            'image_url' : f'/static/outputs/{new_path}'
         })
         counter += 1
     return jsonify(results)
